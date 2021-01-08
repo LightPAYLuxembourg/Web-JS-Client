@@ -43,12 +43,12 @@ app.get("/api/payments/init", csrfProtection, (req, res) => {
     if(!req.query.amount || req.query.amount < 1) {
         /*res.writeHead(301, {
             'Content-Type': 'text/html',
-            Location: "http://localhost:9002/v1/web/api/payments/response"
+            Location: "http://localhost:9001"
         });*/
         //return res.end("404 Not Found");
     }
 
-    let amount = currencyFormatter(req.query.amount);
+    let amount = currencyFormatter(100);
     console.log("/api/payments/init");
 
     let request = new Request({
@@ -58,12 +58,25 @@ app.get("/api/payments/init", csrfProtection, (req, res) => {
     }, "test");
 
     request.getToken({
-        merchant_id: '__CONSUMER_KEY',
+        merchant_id: '__CONSUMER_KEY__',
         amount: 100,
         ref: 'sumref',
         custom_fields: 'foo=bar;bar=foo'
     }).then(data => {
         token = data;
+
+        /**
+         * TEST MODE ONLY
+         * This simulate a payment
+         */
+        if(token) {
+            request.simulatePayment(token).then(res =>{
+                console.log(res);
+            }).catch(err => {
+                console.log("Error => " + err);
+            })
+        }
+
         res.render('index', {token: token, amount: amount});
     }).catch((e) => {
         console.log("error...")

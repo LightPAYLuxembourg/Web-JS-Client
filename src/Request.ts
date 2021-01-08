@@ -42,6 +42,24 @@ export default class Request {
         });
     }
 
+    /**
+     * This method is availabe for test mode only
+     * @param token
+     */
+    public simulatePayment(token: string): Promise<any> {
+        return new Promise((resolve, reject) => {
+            this.post("/requests/pay/simulate", {
+                payment_token: token
+            }).then(res => {
+                //console.log(res);
+                resolve(res);
+            }).catch(err => {
+                console.log(err);
+                reject(err);
+            })
+        });
+    }
+
     public refundPayment(amount: number, trxid: string): Promise<any> {
         return new Promise((resolve, reject) => {
             this.post("/web/api/payments/refunds", {

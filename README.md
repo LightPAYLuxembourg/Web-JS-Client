@@ -39,6 +39,8 @@ Use the helpers methods located at `src/Request.ts`:
 - getPaymentStatus
 - getPaymentDetails
 
+> To simulate a payment use `simulatePayment` method, this is available for test mode ONLY
+
 ### Payment procedure
 Let's say the customer has placed an order at your shop, and clicked `Pay with LightPAY` button.
 
