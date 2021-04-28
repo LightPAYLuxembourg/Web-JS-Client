@@ -19,7 +19,6 @@ export default class Request {
      * @param string test|prod
      */
     public mode: 'test' | 'prod' = "test";
-    //public end_point = "http://localhost:9002";//https://demo.lunch-digi-pay.lu";
     public end_point = "https://webdemo.lunch-digi-pay.lu";
     public client: client.ClientsInterface;
     public port: number;
@@ -28,6 +27,10 @@ export default class Request {
         this.client = client;
         this.mode = mode;
         this.port = port;
+        
+        if(mode === "prod") {
+            this.end_point = "https://web.lunch-digi-pay.lu";
+        }
     }
 
     public getToken(data: client.DataInitInterface): Promise<any> {
@@ -129,10 +132,6 @@ export default class Request {
     public request<T>(method: string, path: string, content: {}, is_authenticated: boolean = true, headers: HeadersInterface[] = []): Promise<T> {
         return new Promise<T>((resolve, reject) => {
             try {
-                if (this.mode === "prod") {
-                    this.end_point = "https://webdemo.lunch-digi-pay.lu";
-                }
-
                 let url;
                 let body = "";
                 const orderedBody = {};
